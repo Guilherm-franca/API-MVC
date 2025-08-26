@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Minhas Tarefas</title>
+</head>
+<body>
+    <h1>Minhas Tarefas</h1>
+    <a href="{{ url_for('create_task') }}">Criar Nova Tarefa</a>
+    <table>
+        <tr>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Usuário</th>
+            <th>Ações</th>
+        </tr>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.user.nome }}</td>  <!-- Assumindo que o modelo Usuario tem um campo nome -->
+            <td>
+                <form action="{{ url_for('update_task_status', task_id=task.id) }}" method="POST">
+                    <button type="submit">Concluir</button>
+                </form>
+                <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
