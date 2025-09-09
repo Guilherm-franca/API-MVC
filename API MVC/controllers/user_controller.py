@@ -1,4 +1,3 @@
-# controllers/usuario_controller.py
 from flask import request, jsonify
 from database import db
 from models.user import Usuario
@@ -6,7 +5,10 @@ from models.user import Usuario
 class UsuarioController:
     @staticmethod
     def criar_usuario():
-        data = request.json
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Request body must be JSON"}), 400
+
         if 'nome' not in data or 'email' not in data:
             return jsonify({"error": "Nome e email são obrigatórios"}), 400
 
@@ -34,7 +36,10 @@ class UsuarioController:
         if usuario is None:
             return jsonify({"error": "Usuário não encontrado"}), 404
 
-        data = request.json
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Request body must be JSON"}), 400
+
         if 'nome' in data:
             usuario.nome = data['nome']
         if 'email' in data:
@@ -52,3 +57,4 @@ class UsuarioController:
         db.session.delete(usuario)
         db.session.commit()
         return jsonify({"message": "Usuário excluído com sucesso"}), 200
+    
